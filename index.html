@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#5b3fd1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mookpilai n Friends">
+<title>Mookpilai n Friends</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#5b3fd1; --accent-dark:#4a31b3; --accent-soft:#eeeafd; --accent-softer:#f6f4ff;
+  --bg:#f7f6fb; --card:#fff; --text:#22203a; --muted:#6c6a80; --line:#e6e3f2;
+  --danger:#d93a5b; --danger-soft:#fdecef; --warn:#b26a00; --warn-soft:#fff5e0; --ok:#1d9a6c; --ok-soft:#e5f7ef;
+  --radius:18px; --shadow:0 2px 10px rgba(60,40,140,.07);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:"Noto Sans Thai","Sarabun",system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:17px;line-height:1.5;padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+button,input,textarea,select{font-family:inherit;font-size:17px;color:inherit}
+.wrap{max-width:720px;margin:0 auto;padding:0 14px}
+header.top{background:linear-gradient(135deg,#5b3fd1 0%,#7a5cf0 100%);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 0 54px;border-radius:0 0 28px 28px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:28px;flex:none}
+.brand h1{margin:0;font-size:24px;line-height:1.2;font-weight:800;letter-spacing:.2px}
+.brand p{margin:2px 0 0;opacity:.9;font-size:15px}
+.stepnav{display:flex;gap:6px;margin-top:16px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.stepnav::-webkit-scrollbar{display:none}
+.stepnav a{flex:none;color:#fff;text-decoration:none;background:rgba(255,255,255,.16);padding:8px 13px;border-radius:999px;font-size:14px;font-weight:600;white-space:nowrap}
+.stepnav a:active{background:rgba(255,255,255,.3)}
+main{margin-top:-38px}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 16px;margin-bottom:16px;scroll-margin-top:12px}
+.step-h{display:flex;align-items:center;gap:10px;margin:0 0 4px}
+.step-n{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800;font-size:17px;flex:none}
+.step-h h2{margin:0;font-size:20px;font-weight:700}
+.hint{color:var(--muted);font-size:15px;margin:2px 0 14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:12px 18px;border-radius:14px;border:0;background:var(--accent);color:#fff;font-weight:700;cursor:pointer;width:100%;text-align:center;transition:transform .05s,background .15s}
+.btn:active{transform:scale(.98)}
+.btn.sec{background:var(--accent-soft);color:var(--accent)}
+.btn.ghost{background:#fff;color:var(--accent);border:2px dashed #cfc5f7}
+.btn.danger{background:var(--danger-soft);color:var(--danger)}
+.btn.ok{background:var(--ok)}
+.btn:disabled{opacity:.5}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn .ico{font-size:22px}
+.preview{margin-top:12px;display:none}
+.preview img{width:100%;max-height:360px;object-fit:contain;background:#f0eef8;border-radius:14px;display:block}
+.progress{margin-top:12px;display:none}
+.bar{height:14px;background:var(--accent-soft);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#5b3fd1,#8b6ff5);transition:width .25s}
+.progress .lbl{font-size:15px;color:var(--muted);margin-top:6px;display:flex;justify-content:space-between}
+details.paste{margin-top:14px;border:1px solid var(--line);border-radius:14px;padding:4px 14px}
+details.paste summary{cursor:pointer;font-weight:600;padding:10px 0;color:var(--accent);list-style:none}
+details.paste summary::-webkit-details-marker{display:none}
+details.paste summary::before{content:"▸ ";}
+details.paste[open] summary::before{content:"▾ ";}
+textarea{width:100%;min-height:150px;border:1.5px solid var(--line);border-radius:12px;padding:12px;font-size:16px;resize:vertical;background:#fcfbff}
+textarea:focus,input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,63,209,.15)}
+.msg{margin-top:10px;padding:10px 14px;border-radius:12px;font-size:15px;display:none}
+.msg.show{display:block}
+.msg.ok{background:var(--ok-soft);color:#126b4a}
+.msg.err{background:var(--danger-soft);color:var(--danger)}
+.msg.warn{background:var(--warn-soft);color:var(--warn)}
+/* items */
+.item{border:1.5px solid var(--line);border-radius:16px;padding:12px;margin-bottom:12px;background:#fff}
+.item.unassigned{border-color:#f0c36d;background:#fffdf7}
+.item-top{display:flex;gap:8px;align-items:center}
+.item-top input.name{flex:1;min-width:0;font-weight:600}
+.del{flex:none;width:46px;height:46px;border-radius:12px;border:0;background:var(--danger-soft);color:var(--danger);font-size:20px;cursor:pointer}
+input.f{width:100%;height:48px;border:1.5px solid var(--line);border-radius:12px;padding:0 12px;background:#fcfbff;font-size:17px}
+.grid3{display:grid;grid-template-columns:1.3fr 1fr;gap:8px 10px;margin-top:10px}
+.grid3 .fld.dsc{grid-column:1/-1}
+.fld label{display:block;font-size:13px;color:var(--muted);margin:0 0 3px 2px}
+.disc{display:flex;gap:6px}
+.disc input{flex:1;min-width:70px}
+.unit{display:flex;border-radius:12px;overflow:hidden;border:1.5px solid var(--line);flex:none}
+.unit button{border:0;background:#fff;min-width:44px;height:45px;font-weight:700;color:var(--muted);cursor:pointer;padding:0 8px}
+.unit button.on{background:var(--accent);color:#fff}
+.line-net{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.line-net .l{color:var(--muted);font-size:15px}
+.line-net .v{font-weight:800;font-size:19px}
+.line-net s{color:var(--muted);font-weight:500;font-size:15px;margin-right:6px}
+.badge-off{display:inline-block;background:var(--ok-soft);color:var(--ok);font-size:13px;font-weight:700;border-radius:99px;padding:1px 8px;margin-left:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chips .lab{width:100%;font-size:14px;color:var(--muted)}
+.chip{min-height:42px;padding:6px 14px;border-radius:999px;border:1.5px solid #d6cdf8;background:#fff;color:var(--accent);font-weight:600;cursor:pointer;font-size:16px}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip.all.on{background:#2f2a56;border-color:#2f2a56}
+.chip-warn{width:100%;font-size:14px;color:var(--warn);background:var(--warn-soft);border-radius:10px;padding:6px 10px}
+.empty{text-align:center;color:var(--muted);padding:18px;border:2px dashed var(--line);border-radius:14px;margin-bottom:12px}
+.items-total{display:flex;justify-content:space-between;font-weight:700;margin:4px 2px 12px;color:var(--muted)}
+/* people */
+.person{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;flex:none;font-size:17px}
+.person input{flex:1;min-width:0}
+/* mode */
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--accent-soft);border-radius:16px;padding:5px;gap:5px}
+.seg button{border:0;background:transparent;min-height:64px;border-radius:12px;font-weight:700;color:var(--accent);cursor:pointer;padding:8px;line-height:1.3}
+.seg button small{display:block;font-weight:500;font-size:13px;opacity:.85}
+.seg button.on{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(91,63,209,.3)}
+/* charges */
+.charge{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.charge:last-child{border-bottom:0}
+.charge .t{flex:1}
+.charge .t b{display:block}
+.charge .t span{font-size:14px;color:var(--muted)}
+.charge .inp{width:96px;flex:none;position:relative}
+.charge .inp input{text-align:right;padding-right:28px}
+.charge .inp i{position:absolute;right:10px;top:12px;font-style:normal;color:var(--muted)}
+.charge.off .inp{opacity:.4}
+.sw{position:relative;width:58px;height:34px;flex:none}
+.sw input{opacity:0;width:0;height:0;position:absolute}
+.sw span{position:absolute;inset:0;background:#d6d3e2;border-radius:99px;transition:.2s;cursor:pointer}
+.sw span::after{content:"";position:absolute;width:28px;height:28px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw input:checked+span{background:var(--accent)}
+.sw input:checked+span::after{transform:translateX(24px)}
+.billdisc{display:flex;gap:6px;width:150px;flex:none}
+.billdisc input{text-align:right}
+/* summary */
+table.bd{width:100%;border-collapse:collapse;font-size:16px}
+table.bd td{padding:9px 2px;border-bottom:1px solid var(--line)}
+table.bd td:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.bd tr.neg td:last-child{color:var(--ok)}
+table.bd tr.grand td{border-bottom:0;font-size:21px;font-weight:800;color:var(--accent);padding-top:12px}
+.round{display:flex;align-items:center;gap:12px;background:var(--accent-softer);border-radius:14px;padding:12px 14px;margin:14px 0}
+.round .t{flex:1;font-weight:600}
+.round .t span{display:block;font-weight:400;font-size:14px;color:var(--muted)}
+.pcard{border-radius:16px;border:1.5px solid var(--line);padding:14px;margin-bottom:12px}
+.pcard .ph{display:flex;align-items:center;gap:10px}
+.pcard .pn{flex:1;font-weight:700;font-size:18px;min-width:0;overflow-wrap:anywhere}
+.pcard .amt{font-size:26px;font-weight:800;color:var(--accent);white-space:nowrap}
+.pcard .amt small{font-size:15px;font-weight:600;color:var(--muted)}
+.pcard .exact{font-size:13px;color:var(--muted);text-align:right}
+.pcard ul{list-style:none;padding:0;margin:10px 0 0;font-size:15px;color:var(--muted)}
+.pcard li{display:flex;justify-content:space-between;gap:8px;padding:2px 0}
+.pcard li span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}
+.pcard .ate{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:14px;color:var(--text)}
+.pcard .ate b{color:var(--muted);font-weight:600}
+.over{font-size:15px;color:var(--warn);background:var(--warn-soft);padding:10px 12px;border-radius:12px;margin-bottom:12px}
+.actions{display:grid;gap:10px;margin-top:6px}
+/* bottom bar */
+.bottombar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));z-index:20}
+.bottombar .wrap{display:flex;align-items:center;gap:12px;padding:0}
+.bottombar .tot{flex:1;min-width:0}
+.bottombar .tot small{display:block;color:var(--muted);font-size:13px;line-height:1.2}
+.bottombar .tot b{font-size:22px;color:var(--accent);white-space:nowrap}
+.bottombar .btn{width:auto;min-width:150px}
+.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#2f2a56;color:#fff;padding:12px 20px;border-radius:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.modal{position:fixed;inset:0;background:rgba(20,15,50,.5);display:none;align-items:flex-end;justify-content:center;z-index:60;padding:12px}
+.modal.show{display:flex}
+.modal .box{background:#fff;border-radius:20px;padding:18px;width:100%;max-width:560px}
+.modal h3{margin:0 0 8px}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:6px 0 20px}
+@media (min-width:600px){
+  .brand h1{font-size:30px}
+  .grid3{grid-template-columns:1fr 110px 1.3fr}
+  .grid3 .fld.dsc{grid-column:auto}
+  .people-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+}
+@media (max-width:360px){
+  .billdisc{width:130px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo">🧾</div>
+      <div>
+        <h1>Mookpilai n Friends</h1>
+        <p>หารบิลง่ายๆ กับเพื่อน</p>
+      </div>
+    </div>
+    <nav class="stepnav">
+      <a href="#s1">① อ่านบิล</a><a href="#s2">② รายการ</a><a href="#s3">③ คนร่วมบิล</a><a href="#s4">④ วิธีหาร</a><a href="#s5">⑤ ค่าบริการ/VAT</a><a href="#s6">⑥ สรุป</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- STEP 1 -->
+  <section class="card" id="s1">
+    <div class="step-h"><div class="step-n">1</div><h2>อ่านบิล</h2></div>
+    <p class="hint">ถ่ายรูปใบเสร็จ หรือเลือกรูปจากเครื่อง ระบบจะอ่านรายการให้อัตโนมัติ (ตรวจแก้ได้ในขั้นที่ 2)</p>
+    <div class="btn-row">
+      <button class="btn" id="btnCamera"><span class="ico">📷</span>ถ่ายรูปบิล</button>
+      <button class="btn sec" id="btnUpload"><span class="ico">🖼️</span>เลือกรูป</button>
+    </div>
+    <input type="file" id="fileCamera" accept="image/*" capture="environment" hidden>
+    <input type="file" id="fileUpload" accept="image/*" hidden>
+    <div class="preview" id="preview"><img id="previewImg" alt="รูปบิล"></div>
+    <div class="progress" id="progress">
+      <div class="bar"><i id="barFill"></i></div>
+      <div class="lbl"><span id="progLabel">กำลังเตรียม…</span><span id="progPct">0%</span></div>
+    </div>
+    <div class="msg" id="ocrMsg"></div>
+    <details class="paste" id="pasteBox">
+      <summary>หรือ วางข้อความบิลเอง</summary>
+      <p class="hint" style="margin-top:0">วางข้อความ 1 บรรทัดต่อ 1 รายการ เช่น <b>ข้าวผัดกุ้ง 120</b> หรือ <b>2 x ชาไทย 90</b></p>
+      <textarea id="pasteText" placeholder="ข้าวผัดกุ้ง 120&#10;ต้มยำกุ้ง 220&#10;3 x ชาไทย 135&#10;รวม 475"></textarea>
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn sec" id="btnParseAdd">➕ เพิ่มต่อท้าย</button>
+        <button class="btn" id="btnParseReplace">🔄 แทนที่รายการ</button>
+      </div>
+    </details>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="card" id="s2">
+    <div class="step-h"><div class="step-n">2</div><h2>ตรวจรายการอาหาร</h2></div>
+    <p class="hint">แก้ชื่อ ราคา จำนวน หรือใส่ส่วนลดของแต่ละรายการได้</p>
+    <div id="itemsList"></div>
+    <div class="items-total"><span id="itemsCount">0 รายการ</span><span id="itemsSum">0.00 บาท</span></div>
+    <button class="btn ghost" id="btnAddItem">➕ เพิ่มรายการ</button>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="card" id="s3">
+    <div class="step-h"><div class="step-n">3</div><h2>ใครร่วมบิลบ้าง</h2></div>
+    <p class="hint">แตะที่ชื่อเพื่อแก้ไขได้เลย</p>
+    <div id="peopleList" class="people-grid"></div>
+    <button class="btn ghost" id="btnAddPerson">➕ เพิ่มคน</button>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="card" id="s4">
+    <div class="step-h"><div class="step-n">4</div><h2>หารแบบไหนดี</h2></div>
+    <p class="hint" id="modeHint"></p>
+    <div class="seg" id="modeSeg">
+      <button data-mode="equal">⚖️ หารเท่ากัน<small>ทุกคนจ่ายเท่ากัน</small></button>
+      <button data-mode="item">🍽️ หารตามที่กิน<small>เลือกคนในแต่ละรายการ</small></button>
+    </div>
+  </section>
+
+  <!-- STEP 5 -->
+  <section class="card" id="s5">
+    <div class="step-h"><div class="step-n">5</div><h2>ค่าบริการ / VAT / ส่วนลด</h2></div>
+    <div class="charge" id="rowSC">
+      <div class="t"><b>Service Charge</b><span>ค่าบริการ คิดหลังหักส่วนลด</span></div>
+      <div class="inp"><input class="f" id="scRate" inputmode="decimal" autocomplete="off"><i>%</i></div>
+      <label class="sw"><input type="checkbox" id="scOn"><span></span></label>
+    </div>
+    <div class="charge" id="rowVAT">
+      <div class="t"><b>VAT</b><span>ภาษีมูลค่าเพิ่ม คิดรวมค่าบริการ</span></div>
+      <div class="inp"><input class="f" id="vatRate" inputmode="decimal" autocomplete="off"><i>%</i></div>
+      <label class="sw"><input type="checkbox" id="vatOn"><span></span></label>
+    </div>
+    <div class="charge">
+      <div class="t"><b>ส่วนลดท้ายบิล</b><span>เช่น ลด 10% ทั้งบิล หรือคูปอง 100 บาท</span></div>
+      <div class="billdisc">
+        <input class="f" id="billDiscVal" inputmode="decimal" placeholder="0" autocomplete="off">
+        <div class="unit" id="billDiscUnit"><button data-u="pct">%</button><button data-u="baht">฿</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 6 -->
+  <section class="card" id="s6">
+    <div class="step-h"><div class="step-n">6</div><h2>สรุปยอด</h2></div>
+    <table class="bd" id="breakdown"></table>
+    <div class="round">
+      <div class="t">ปัดขึ้นเป็นบาทเต็ม<span>ปัดเศษสตางค์ของแต่ละคนขึ้น จ่ายง่ายขึ้น</span></div>
+      <label class="sw"><input type="checkbox" id="roundOn"><span></span></label>
+    </div>
+    <div id="unassignedWarn"></div>
+    <div id="personCards"></div>
+    <div id="overage"></div>
+    <div class="actions">
+      <button class="btn ok" id="btnCopy">💬 คัดลอกสรุปส่งไลน์</button>
+      <button class="btn danger" id="btnReset">🗑️ เริ่มบิลใหม่</button>
+    </div>
+  </section>
+  <footer>Mookpilai n Friends • ข้อมูลเก็บในเครื่องนี้เท่านั้น</footer>
+</main>
+
+<div class="bottombar"><div class="wrap">
+  <div class="tot"><small>ยอดรวมทั้งบิล</small><b id="barTotal">0.00 ฿</b></div>
+  <a href="#s6" class="btn" id="btnGoSummary" style="text-decoration:none">ดูสรุป ↓</a>
+</div></div>
+<div class="toast" id="toast"></div>
+<div class="modal" id="copyModal"><div class="box">
+  <h3>คัดลอกข้อความนี้</h3>
+  <p class="hint" style="margin:0 0 8px">กดค้างที่ข้อความ แล้วเลือก "คัดลอก" เพื่อส่งในไลน์</p>
+  <textarea id="copyText" readonly style="min-height:260px"></textarea>
+  <button class="btn" style="margin-top:10px" id="btnCloseModal">ปิด</button>
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+"use strict";
+/* ================= Utilities ================= */
+const $ = s => document.querySelector(s);
+const STORE_KEY = "mookpilai-billsplit-v1";
+const COLORS = ["#5b3fd1","#e0648b","#1d9a6c","#e58a1f","#2f80d1","#9b51e0","#c0392b","#16a085","#7f8c8d","#d35400"];
+const uid = () => Math.random().toString(36).slice(2, 9);
+const r2 = n => Math.round((n + Number.EPSILON) * 100) / 100;
+const fmt = n => (Math.round(n * 100) / 100).toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmt0 = n => Math.round(n).toLocaleString("th-TH");
+const num = v => { const n = parseFloat(String(v ?? "").replace(/,/g, "").replace(/[^\d.\-]/g, "")); return isFinite(n) ? n : 0; };
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const showStr = n => (n === 0 || n === "" || n == null) ? "" : String(+(+n).toFixed(2));
+
+/* ================= Bill text parser ================= */
+const THAI_DIGITS = "๐๑๒๓๔๕๖๗๘๙";
+const SKIP_RE = new RegExp([
+  "total","sub\\s*-?\\s*total","grand","amount","รวม","ยอด","สุทธิ","vat","v\\.a\\.t","ภาษี","service","svc","s/c","ค่าบริการ","บริการ",
+  "ส่วนลด","discount","disc\\b","cash","เงินสด","ทอน","change","tax","date","time","วันที่","เวลา","โต๊ะ","table","ใบเสร็จ","receipt",
+  "invoice","ใบกำกับ","\\btel\\b","โทร","เลขที่","no\\.","\\bpos\\b","cashier","พนักงาน","staff","guest","จำนวนคน","\\bpax\\b","บัตร","card","credit",
+  "visa","master","promptpay","พร้อมเพย์","\\bqr\\b","rounding","ปัดเศษ","balance","paid","ชำระ","รับเงิน","thank","ขอบคุณ","tax\\s*id","branch","สาขา",
+  "member","สมาชิก","point","แต้ม","order\\s*#","check\\s*#","bill\\b","บิล","ลูกค้า","customer","รายการ\\s*$","qty","จำนวน\\s*$"
+].join("|"), "i");
+const NUM_RE = /\d{1,3}(?:,\d{3})+(?:\.\d{1,2})?|\d+(?:\.\d{1,2})?/g;
+
+function normalizeLine(s) {
+  return String(s)
+    .replace(/[๐-๙]/g, d => THAI_DIGITS.indexOf(d))
+    .replace(/\u0E4D\u0E32/g, "\u0E33")            // OCR: ํ + า  -> ำ
+    .replace(/[×✕✖]/g, "x")
+    .replace(/(\d)\s*[.,]\s+(\d{2})\b/g, "$1.$2")   // "120. 00" -> 120.00 (OCR artefact)
+    .replace(/(\d),(\d{2})(?!\d)/g, "$1.$2")         // "120,00" -> 120.00
+    .replace(/[฿]|บาท|THB/gi, " ")
+    .replace(/\s+/g, " ").trim();
+}
+
+function parseBillText(text) {
+  const items = [];
+  for (const raw of String(text || "").split(/\r?\n/)) {
+    let line = normalizeLine(raw);
+    if (!line) continue;
+    if (SKIP_RE.test(line)) continue;
+    if (/\d{1,2}[\/:]\d{1,2}[\/:]\d{2,4}/.test(line) || /\b\d{1,2}:\d{2}\b/.test(line)) continue; // dates/times
+    const nums = [...line.matchAll(NUM_RE)];
+    if (!nums.length) continue;
+    const last = nums[nums.length - 1];
+    const total = parseFloat(last[0].replace(/,/g, ""));
+    if (!(total > 0) || total > 100000) continue;
+    let rest = (line.slice(0, last.index) + " " + line.slice(last.index + last[0].length)).trim();
+    rest = rest.replace(/^\d{1,2}[.)]\s+/, "");   // item numbering "1. " / "1) "
+    let qty = 1, m, stripNums = false;
+    // quantity patterns
+    if ((m = rest.match(/^(\d{1,3})\s*(?:x|\*|@|ที่|จาน|แก้ว|ชิ้น|ถ้วย|ขวด)\s*/i))) { qty = +m[1]; rest = rest.slice(m[0].length); }
+    else if ((m = rest.match(/(?:^|\s)(?:x|\*)\s*(\d{1,3})(?=\s|$)/i))) { qty = +m[1]; rest = rest.replace(m[0], " "); }
+    else if ((m = rest.match(/(?:^|\s)(\d{1,3})\s*x(?=\s|$)/i))) { qty = +m[1]; rest = rest.replace(m[0], " "); }
+    else if ((m = rest.match(/^(\d{1,2})\s+(?=\S)/))) { qty = +m[1]; rest = rest.slice(m[0].length); }
+    // remaining numbers, e.g. "ชาไทย 3 45.00 135.00"  ->  qty 3, unit 45
+    const others = [...rest.matchAll(NUM_RE)].map(x => parseFloat(x[0].replace(/,/g, "")));
+    if (qty === 1 && others.length >= 2) {
+      const a = others[others.length - 2], b = others[others.length - 1];
+      if (Number.isInteger(a) && a > 0 && a < 100 && Math.abs(a * b - total) < 0.06) { qty = a; stripNums = true; }
+      else if (Number.isInteger(b) && b > 0 && b < 100 && Math.abs(a * b - total) < 0.06) { qty = b; stripNums = true; }
+    } else if (qty === 1 && others.length === 1) {
+      const a = others[0];
+      if (Number.isInteger(a) && a > 1 && a < 100 && Math.abs(total / a - Math.round(total / a * 100) / 100) < 1e-9 && /\s\d{1,2}\s*$/.test(rest)) { qty = a; stripNums = true; }
+    }
+    // trailing "@45" or unit price chunks are dropped from the name
+    let name = rest.replace(/@\s*\d+(?:\.\d+)?/g, " ");
+    // drop qty/unit-price numbers; keep descriptive ones like "3 ชิ้น" / "500ml"
+    name = stripNums ? name.replace(NUM_RE, " ")
+      : name.replace(/(?:^|\s)\d+(?:\.\d+)?(?=\s|$)(?!\s*(?:ชิ้น|ไม้|ลูก|ตัว|ml|มล|g|กรัม|oz|pcs|นิ้ว|ซม|cm|ขีด|กก|kg))/gi, " ");
+    name = name
+      .replace(/^[\s\-–—:.*#•·|_~=+]+|[\s\-–—:.*#•·|_~=+@]+$/g, "")
+      .replace(/[|_~=]+/g, " ").replace(/\s+/g, " ").trim();
+    const letters = (name.match(/[A-Za-z\u0E00-\u0E7F]/g) || []).length;
+    if (letters < 2) continue;
+    if (qty < 1 || qty > 99) qty = 1;
+    items.push({ name, price: r2(total / qty), qty });
+  }
+  return items;
+}
+
+/* ================= State ================= */
+function demoState() {
+  const p1 = uid(), p2 = uid();
+  return {
+    v: 1,
+    people: [{ id: p1, name: "คนที่ 1" }, { id: p2, name: "คนที่ 2" }],
+    items: [
+      { id: uid(), name: "ข้าวผัดกุ้ง", price: 120, qty: 1, disc: 0, discUnit: "pct", who: [] },
+      { id: uid(), name: "ต้มยำกุ้ง", price: 220, qty: 1, disc: 0, discUnit: "pct", who: [] },
+      { id: uid(), name: "หมูทอดกระเทียม", price: 150, qty: 1, disc: 10, discUnit: "pct", who: [] },
+      { id: uid(), name: "ชาไทย", price: 45, qty: 3, disc: 0, discUnit: "pct", who: [] }
+    ],
+    mode: "equal",
+    scOn: true, scRate: 10,
+    vatOn: true, vatRate: 7,
+    billDisc: 0, billDiscUnit: "pct",
+    roundUp: false
+  };
+}
+function emptyState() {
+  const s = demoState(); s.items = []; return s;
+}
+let state;
+try { state = JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) { state = null; }
+if (!state || !Array.isArray(state.items) || !Array.isArray(state.people)) state = demoState();
+let saveT;
+function save() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {} }, 150); }
+
+/* ================= Calculation ================= */
+function itemCalc(it) {
+  const gross = Math.max(0, num(it.price) * Math.max(0, num(it.qty)));
+  let d = it.discUnit === "baht" ? num(it.disc) : gross * num(it.disc) / 100;
+  d = Math.min(Math.max(0, d), gross);
+  return { gross, disc: d, net: gross - d };
+}
+function compute(s) {
+  s = s || state;
+  const people = s.people, n = people.length || 1;
+  const lines = s.items.map(it => ({ it, ...itemCalc(it) }));
+  const subtotal = lines.reduce((a, l) => a + l.gross, 0);
+  const itemDisc = lines.reduce((a, l) => a + l.disc, 0);
+  const afterItem = subtotal - itemDisc;
+  let billDisc = s.billDiscUnit === "baht" ? num(s.billDisc) : afterItem * num(s.billDisc) / 100;
+  billDisc = Math.min(Math.max(0, billDisc), afterItem);
+  const afterDisc = afterItem - billDisc;
+  const service = s.scOn ? afterDisc * num(s.scRate) / 100 : 0;
+  const vat = s.vatOn ? (afterDisc + service) * num(s.vatRate) / 100 : 0;
+  const total = afterDisc + service + vat;
+  const ids = people.map(p => p.id);
+  const unassigned = [];
+  const per = people.map(p => ({ id: p.id, name: p.name, food: 0, itemsAte: [] }));
+  const byId = Object.fromEntries(per.map(x => [x.id, x]));
+  if (s.mode === "item") {
+    for (const l of lines) {
+      let who = (l.it.who || []).filter(id => ids.includes(id));
+      if (!who.length) { who = ids; if (l.gross > 0) unassigned.push(l.it); }
+      for (const id of who) {
+        byId[id].food += l.net / who.length;
+        byId[id].itemsAte.push({ name: l.it.name, share: who.length, amount: l.net / who.length });
+      }
+    }
+  } else {
+    for (const x of per) x.food = afterItem / n;
+  }
+  for (const x of per) {
+    const ratio = s.mode === "item" ? (afterItem > 0 ? x.food / afterItem : 1 / n) : 1 / n;
+    x.billDisc = billDisc * ratio; x.service = service * ratio; x.vat = vat * ratio;
+    x.total = x.food - x.billDisc + x.service + x.vat;
+    x.rounded = Math.ceil(r2(x.total) - 1e-9);
+  }
+  const roundedSum = per.reduce((a, x) => a + x.rounded, 0);
+  return { subtotal, itemDisc, afterItem, billDisc, afterDisc, service, vat, total, per, unassigned, roundedSum, overage: roundedSum - total };
+}
+
+/* ================= Rendering ================= */
+const colorOf = i => COLORS[i % COLORS.length];
+function initial(name) {
+  const n = String(name || "").trim(); if (!n) return "?";
+  const d = n.match(/(\d+)$/); if (d && /^คนที่|^person/i.test(n)) return d[1];
+  const m = n.match(/^[เแโใไ]?./u); return m ? m[0].toUpperCase() : "?";
+}
+function renderItems() {
+  const box = $("#itemsList");
+  if (!state.items.length) { box.innerHTML = '<div class="empty">ยังไม่มีรายการ<br>ถ่ายรูปบิล วางข้อความ หรือกด "เพิ่มรายการ"</div>'; updateTotals(); return; }
+  const byItem = state.mode === "item";
+  box.innerHTML = state.items.map(it => `
+    <div class="item" data-id="${it.id}">
+      <div class="item-top">
+        <input class="f name" data-k="name" value="${esc(it.name)}" placeholder="ชื่อรายการ" autocomplete="off">
+        <button class="del" data-act="del" aria-label="ลบรายการ">🗑️</button>
+      </div>
+      <div class="grid3">
+        <div class="fld"><label>ราคา/หน่วย (บาท)</label><input class="f" data-k="price" inputmode="decimal" value="${showStr(it.price)}" placeholder="0" autocomplete="off"></div>
+        <div class="fld"><label>จำนวน</label><input class="f" data-k="qty" inputmode="numeric" value="${showStr(it.qty)}" placeholder="1" autocomplete="off"></div>
+        <div class="fld dsc"><label>ส่วนลดรายการ</label><div class="disc">
+          <input class="f" data-k="disc" inputmode="decimal" value="${showStr(it.disc)}" placeholder="0" autocomplete="off">
+          <div class="unit"><button data-act="unit" data-u="pct" class="${it.discUnit !== "baht" ? "on" : ""}">%</button><button data-act="unit" data-u="baht" class="${it.discUnit === "baht" ? "on" : ""}">฿</button></div>
+        </div></div>
+      </div>
+      <div class="line-net"><span class="l">ราคารวม</span><span class="v" data-net></span></div>
+      ${byItem ? `<div class="chips" data-chips></div>` : ""}
+    </div>`).join("");
+  state.items.forEach(it => { updateItemRow(it); if (byItem) renderChips(it); });
+  updateTotals();
+}
+function rowOf(id) { return document.querySelector(`.item[data-id="${id}"]`); }
+function updateItemRow(it) {
+  const row = rowOf(it.id); if (!row) return;
+  const c = itemCalc(it);
+  const pctTxt = c.disc > 0 ? `<span class="badge-off">-${it.discUnit === "baht" ? fmt(c.disc) + "฿" : showStr(it.disc) + "%"}</span>` : "";
+  row.querySelector("[data-net]").innerHTML = (c.disc > 0 ? `<s>${fmt(c.gross)}</s>` : "") + `${fmt(c.net)} ฿` + pctTxt;
+}
+function renderChips(it) {
+  const row = rowOf(it.id); if (!row) return;
+  const box = row.querySelector("[data-chips]"); if (!box) return;
+  const ids = state.people.map(p => p.id);
+  it.who = (it.who || []).filter(id => ids.includes(id));
+  const all = it.who.length === ids.length && ids.length > 0;
+  box.innerHTML = `<div class="lab">ใครกินรายการนี้บ้าง? ${it.who.length ? `(หาร ${it.who.length} คน)` : ""}</div>` +
+    `<button class="chip all ${all ? "on" : ""}" data-act="all">👥 ทุกคน</button>` +
+    state.people.map(p => `<button class="chip ${it.who.includes(p.id) ? "on" : ""}" data-act="who" data-p="${p.id}">${it.who.includes(p.id) ? "✓ " : ""}${esc(p.name || "ไม่มีชื่อ")}</button>`).join("") +
+    (it.who.length ? "" : `<div class="chip-warn">⚠️ ยังไม่ได้เลือกใคร — จะหารเท่ากันทุกคน</div>`);
+  row.classList.toggle("unassigned", !it.who.length);
+}
+function renderPeople() {
+  $("#peopleList").innerHTML = state.people.map((p, i) => `
+    <div class="person" data-pid="${p.id}">
+      <div class="avatar" style="background:${colorOf(i)}">${esc(initial(p.name))}</div>
+      <input class="f" data-k="pname" value="${esc(p.name)}" placeholder="ชื่อ" autocomplete="off">
+      <button class="del" data-act="pdel" aria-label="ลบคน" ${state.people.length <= 1 ? "disabled style='opacity:.35'" : ""}>✕</button>
+    </div>`).join("");
+}
+function renderMode() {
+  document.querySelectorAll("#modeSeg button").forEach(b => b.classList.toggle("on", b.dataset.mode === state.mode));
+  $("#modeHint").textContent = state.mode === "item"
+    ? "แตะชื่อคนใต้แต่ละรายการในขั้นที่ 2 เพื่อเลือกว่าใครกินบ้าง ค่าบริการ/VAT/ส่วนลดจะเฉลี่ยตามสัดส่วนที่กิน"
+    : "รวมทั้งบิลแล้วหารเท่ากันทุกคน ง่ายและเร็วที่สุด";
+}
+function renderCharges() {
+  $("#scOn").checked = !!state.scOn; $("#vatOn").checked = !!state.vatOn;
+  $("#scRate").value = showStr(state.scRate) || "0"; $("#vatRate").value = showStr(state.vatRate) || "0";
+  $("#rowSC").classList.toggle("off", !state.scOn); $("#rowVAT").classList.toggle("off", !state.vatOn);
+  $("#billDiscVal").value = showStr(state.billDisc);
+  document.querySelectorAll("#billDiscUnit button").forEach(b => b.classList.toggle("on", b.dataset.u === state.billDiscUnit));
+  $("#roundOn").checked = !!state.roundUp;
+}
+function updateTotals() {
+  const c = compute();
+  $("#itemsCount").textContent = `${state.items.length} รายการ`;
+  $("#itemsSum").textContent = `${fmt(c.afterItem)} บาท`;
+  $("#barTotal").textContent = `${fmt(c.total)} ฿`;
+  renderSummary(c);
+  save();
+}
+function renderSummary(c) {
+  const rows = [["ราคาอาหารรวม", fmt(c.subtotal), ""]];
+  if (c.itemDisc > 0) rows.push(["ส่วนลดรายการ", "-" + fmt(c.itemDisc), "neg"]);
+  if (c.billDisc > 0) rows.push([`ส่วนลดท้ายบิล${state.billDiscUnit === "pct" ? ` (${showStr(state.billDisc)}%)` : ""}`, "-" + fmt(c.billDisc), "neg"]);
+  if (state.scOn) rows.push([`Service Charge (${showStr(state.scRate) || 0}%)`, fmt(c.service), ""]);
+  if (state.vatOn) rows.push([`VAT (${showStr(state.vatRate) || 0}%)`, fmt(c.vat), ""]);
+  rows.push(["ยอดรวมทั้งสิ้น", fmt(c.total) + " ฿", "grand"]);
+  $("#breakdown").innerHTML = rows.map(r => `<tr class="${r[2]}"><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("");
+  $("#unassignedWarn").innerHTML = state.mode === "item" && c.unassigned.length
+    ? `<div class="over">⚠️ มี ${c.unassigned.length} รายการที่ยังไม่ได้เลือกคน (${c.unassigned.map(i => esc(i.name)).join(", ")}) — หารเท่ากันทุกคนให้ก่อน</div>` : "";
+  const ru = !!state.roundUp;
+  $("#personCards").innerHTML = c.per.map((x, i) => `
+    <div class="pcard">
+      <div class="ph"><div class="avatar" style="background:${colorOf(i)}">${esc(initial(x.name))}</div>
+        <div class="pn">${esc(x.name || "ไม่มีชื่อ")}</div>
+        <div><div class="amt">${ru ? fmt0(x.rounded) : fmt(x.total)} <small>฿</small></div>${ru && Math.abs(x.rounded - x.total) > 0.004 ? `<div class="exact">จริง ${fmt(x.total)}</div>` : ""}</div>
+      </div>
+      <ul>
+        <li><span>ค่าอาหาร${state.mode === "equal" ? " (หารเท่ากัน)" : ""}</span><span>${fmt(x.food)}</span></li>
+        ${x.billDisc > 0 ? `<li><span>ส่วนลดท้ายบิล</span><span>-${fmt(x.billDisc)}</span></li>` : ""}
+        ${state.scOn ? `<li><span>Service Charge</span><span>${fmt(x.service)}</span></li>` : ""}
+        ${state.vatOn ? `<li><span>VAT</span><span>${fmt(x.vat)}</span></li>` : ""}
+      </ul>
+      ${state.mode === "item" ? `<div class="ate"><b>กิน:</b> ${x.itemsAte.length ? x.itemsAte.map(a => esc(a.name) + (a.share > 1 ? ` (หาร ${a.share})` : "")).join(", ") : "-"}</div>` : ""}
+    </div>`).join("");
+  $("#overage").innerHTML = ru ? `<div class="over">ปัดขึ้นแล้วรวม ${fmt0(c.roundedSum)} ฿ ${c.overage > 0.004 ? `— เกินยอดจริง ${fmt(c.overage)} ฿ (เป็นทิปหรือเก็บไว้เป็นกองกลาง 😊)` : "— พอดีกับยอดจริง"}</div>` : "";
+}
+function renderAll() { renderPeople(); renderMode(); renderCharges(); renderItems(); }
+
+/* ================= Events: items ================= */
+$("#itemsList").addEventListener("input", e => {
+  const k = e.target.dataset.k; const row = e.target.closest(".item"); if (!k || !row) return;
+  const it = state.items.find(i => i.id === row.dataset.id); if (!it) return;
+  it[k] = k === "name" ? e.target.value : num(e.target.value);
+  updateItemRow(it); updateTotals();
+});
+$("#itemsList").addEventListener("click", e => {
+  const b = e.target.closest("button[data-act]"); if (!b) return;
+  const row = b.closest(".item"); const it = state.items.find(i => i.id === row.dataset.id); if (!it) return;
+  const act = b.dataset.act;
+  if (act === "del") {
+    if (it.name && !confirm(`ลบ "${it.name}" ?`)) return;
+    state.items = state.items.filter(i => i !== it); renderItems();
+  } else if (act === "unit") {
+    it.discUnit = b.dataset.u; row.querySelectorAll(".unit button").forEach(x => x.classList.toggle("on", x === b));
+    updateItemRow(it); updateTotals();
+  } else if (act === "who") {
+    const p = b.dataset.p; it.who = it.who || [];
+    it.who = it.who.includes(p) ? it.who.filter(x => x !== p) : [...it.who, p];
+    renderChips(it); updateTotals();
+  } else if (act === "all") {
+    const ids = state.people.map(p => p.id);
+    it.who = it.who && it.who.length === ids.length ? [] : ids.slice();
+    renderChips(it); updateTotals();
+  }
+});
+$("#btnAddItem").onclick = () => {
+  const it = { id: uid(), name: "", price: 0, qty: 1, disc: 0, discUnit: "pct", who: [] };
+  state.items.push(it); renderItems();
+  const inp = rowOf(it.id).querySelector("input.name"); inp.scrollIntoView({ block: "center", behavior: "smooth" }); inp.focus();
+};
+
+/* ================= Events: people ================= */
+$("#peopleList").addEventListener("input", e => {
+  const row = e.target.closest(".person"); if (!row) return;
+  const p = state.people.find(x => x.id === row.dataset.pid); p.name = e.target.value;
+  row.querySelector(".avatar").textContent = initial(p.name);
+  if (state.mode === "item") state.items.forEach(renderChips);
+  updateTotals();
+});
+$("#peopleList").addEventListener("click", e => {
+  const b = e.target.closest("button[data-act=pdel]"); if (!b || state.people.length <= 1) return;
+  const id = b.closest(".person").dataset.pid; const p = state.people.find(x => x.id === id);
+  if (!confirm(`ลบ "${p.name || "คนนี้"}" ออกจากบิล?`)) return;
+  state.people = state.people.filter(x => x.id !== id);
+  state.items.forEach(it => it.who = (it.who || []).filter(x => x !== id));
+  renderPeople(); renderItems();
+});
+$("#btnAddPerson").onclick = () => {
+  const p = { id: uid(), name: `คนที่ ${state.people.length + 1}` };
+  state.people.push(p); renderPeople(); renderItems();
+  const inp = document.querySelector(`.person[data-pid="${p.id}"] input`); inp.focus(); inp.select();
+};
+
+/* ================= Events: mode & charges ================= */
+$("#modeSeg").addEventListener("click", e => {
+  const b = e.target.closest("button[data-mode]"); if (!b) return;
+  state.mode = b.dataset.mode; renderMode(); renderItems();
+  if (state.mode === "item") toast("เลือกคนกินในแต่ละรายการ (ขั้นที่ 2)");
+});
+const bindNum = (sel, key) => $(sel).addEventListener("input", e => { state[key] = num(e.target.value); updateTotals(); });
+bindNum("#scRate", "scRate"); bindNum("#vatRate", "vatRate"); bindNum("#billDiscVal", "billDisc");
+$("#scOn").onchange = e => { state.scOn = e.target.checked; renderCharges(); updateTotals(); };
+$("#vatOn").onchange = e => { state.vatOn = e.target.checked; renderCharges(); updateTotals(); };
+$("#roundOn").onchange = e => { state.roundUp = e.target.checked; updateTotals(); };
+$("#billDiscUnit").addEventListener("click", e => {
+  const b = e.target.closest("button[data-u]"); if (!b) return;
+  state.billDiscUnit = b.dataset.u; renderCharges(); updateTotals();
+});
+
+/* ================= Copy summary ================= */
+function buildSummaryText() {
+  const c = compute(), ru = !!state.roundUp;
+  const L = [];
+  L.push("🧾 Mookpilai n Friends • สรุปหารบิล");
+  L.push(new Date().toLocaleDateString("th-TH", { day: "numeric", month: "short", year: "numeric" }));
+  L.push("━━━━━━━━━━━━━━");
+  for (const it of state.items) {
+    const ic = itemCalc(it);
+    L.push(`• ${it.name || "รายการ"}${num(it.qty) !== 1 ? ` x${showStr(it.qty)}` : ""}  ${fmt(ic.net)}${ic.disc > 0 ? ` (ลด ${fmt(ic.disc)})` : ""}`);
+  }
+  L.push("━━━━━━━━━━━━━━");
+  L.push(`ราคาอาหาร: ${fmt(c.subtotal)}`);
+  if (c.itemDisc > 0) L.push(`ส่วนลดรายการ: -${fmt(c.itemDisc)}`);
+  if (c.billDisc > 0) L.push(`ส่วนลดท้ายบิล${state.billDiscUnit === "pct" ? ` ${showStr(state.billDisc)}%` : ""}: -${fmt(c.billDisc)}`);
+  if (state.scOn) L.push(`Service ${showStr(state.scRate) || 0}%: ${fmt(c.service)}`);
+  if (state.vatOn) L.push(`VAT ${showStr(state.vatRate) || 0}%: ${fmt(c.vat)}`);
+  L.push(`💰 ยอดรวม: ${fmt(c.total)} บาท`);
+  L.push("");
+  L.push(state.mode === "equal" ? `👥 หารเท่ากัน ${c.per.length} คน` : "🍽️ หารตามที่กิน");
+  c.per.forEach(x => {
+    L.push(`👉 ${x.name || "ไม่มีชื่อ"}: ${ru ? fmt0(x.rounded) : fmt(x.total)} บาท`);
+    if (state.mode === "item" && x.itemsAte.length) L.push(`    (${x.itemsAte.map(a => a.name + (a.share > 1 ? ` ÷${a.share}` : "")).join(", ")})`);
+  });
+  if (ru && c.overage > 0.004) L.push(`\n(ปัดขึ้นเป็นบาทเต็ม รวม ${fmt0(c.roundedSum)} บาท เกิน ${fmt(c.overage)} บาท)`);
+  if (state.mode === "item" && c.unassigned.length) L.push(`⚠️ รายการที่ไม่ได้ระบุคน หารเท่ากันทุกคน: ${c.unassigned.map(i => i.name).join(", ")}`);
+  L.push("\nขอบคุณที่มากินด้วยกันนะ 🙏");
+  return L.join("\n");
+}
+async function copyText(text) {
+  try { if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(text); return true; } } catch (e) {}
+  try {
+    const ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", "");
+    ta.style.cssText = "position:fixed;top:0;left:0;opacity:0;font-size:16px"; document.body.appendChild(ta);
+    ta.focus(); ta.select(); ta.setSelectionRange(0, text.length);
+    const ok = document.execCommand("copy"); ta.remove(); return ok;
+  } catch (e) { return false; }
+}
+$("#btnCopy").onclick = async () => {
+  const t = buildSummaryText();
+  if (await copyText(t)) toast("✅ คัดลอกแล้ว ไปวางในไลน์ได้เลย");
+  else { $("#copyText").value = t; $("#copyModal").classList.add("show"); }
+};
+$("#btnCloseModal").onclick = () => $("#copyModal").classList.remove("show");
+$("#btnReset").onclick = () => {
+  if (!confirm("เริ่มบิลใหม่? รายการและการตั้งค่าทั้งหมดจะถูกล้าง")) return;
+  const keepPeople = state.people.map((p, i) => ({ id: p.id, name: p.name }));
+  state = emptyState(); state.people = keepPeople.length ? keepPeople : state.people;
+  $("#previewImg").removeAttribute("src"); $("#preview").style.display = "none"; showMsg("", "");
+  renderAll(); window.scrollTo({ top: 0, behavior: "smooth" }); toast("เริ่มบิลใหม่แล้ว");
+};
+let toastT;
+function toast(t) { const el = $("#toast"); el.textContent = t; el.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove("show"), 2200); }
+function showMsg(t, kind) { const m = $("#ocrMsg"); m.className = "msg" + (t ? " show " + kind : ""); m.innerHTML = t; }
+
+/* ================= Paste text ================= */
+function addParsed(items, replace) {
+  if (!items.length) { showMsg("ไม่พบรายการที่มีราคา ลองตรวจข้อความ หรือเพิ่มรายการเอง", "err"); return 0; }
+  const mapped = items.map(x => ({ id: uid(), name: x.name, price: x.price, qty: x.qty, disc: 0, discUnit: "pct", who: [] }));
+  state.items = replace ? mapped : state.items.concat(mapped);
+  renderItems(); return mapped.length;
+}
+$("#btnParseAdd").onclick = () => { const n = addParsed(parseBillText($("#pasteText").value), false); if (n) { showMsg(`✅ เพิ่ม ${n} รายการแล้ว`, "ok"); $("#s2").scrollIntoView({ behavior: "smooth" }); } };
+$("#btnParseReplace").onclick = () => {
+  const items = parseBillText($("#pasteText").value);
+  if (items.length && state.items.length && !confirm(`แทนที่รายการเดิม ${state.items.length} รายการ?`)) return;
+  const n = addParsed(items, true); if (n) { showMsg(`✅ ได้ ${n} รายการ`, "ok"); $("#s2").scrollIntoView({ behavior: "smooth" }); }
+};
+
+/* ================= OCR ================= */
+$("#btnCamera").onclick = () => $("#fileCamera").click();
+$("#btnUpload").onclick = () => $("#fileUpload").click();
+$("#fileCamera").onchange = e => handleFile(e.target.files[0], e.target);
+$("#fileUpload").onchange = e => handleFile(e.target.files[0], e.target);
+
+function setProgress(p, label) {
+  $("#progress").style.display = "block";
+  $("#barFill").style.width = Math.round(p * 100) + "%";
+  $("#progPct").textContent = Math.round(p * 100) + "%";
+  if (label) $("#progLabel").textContent = label;
+}
+function loadImage(src) { return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; }); }
+function preprocess(img) {
+  // scale: long side max 2000px (downscale big phone photos), upscale small images so text is >= ~20px tall
+  const MAX = 2000, MINW = 1000;
+  let w = img.naturalWidth, h = img.naturalHeight, s = 1;
+  if (Math.max(w, h) > MAX) s = MAX / Math.max(w, h);
+  else if (w < MINW) s = Math.min(2.5, MINW / w);
+  const cw = Math.round(w * s), ch = Math.round(h * s);
+  const cv = document.createElement("canvas"); cv.width = cw; cv.height = ch;
+  const ctx = cv.getContext("2d", { willReadFrequently: true });
+  ctx.imageSmoothingQuality = "high"; ctx.drawImage(img, 0, 0, cw, ch);
+  const d = ctx.getImageData(0, 0, cw, ch), px = d.data;
+  // grayscale + histogram for contrast stretch
+  const hist = new Uint32Array(256);
+  for (let i = 0; i < px.length; i += 4) { const g = (px[i] * 0.299 + px[i + 1] * 0.587 + px[i + 2] * 0.114) | 0; px[i] = g; hist[g]++; }
+  const total = cw * ch; let lo = 0, hi = 255, acc = 0;
+  for (; lo < 255; lo++) { acc += hist[lo]; if (acc > total * 0.01) break; }
+  acc = 0; for (; hi > 0; hi--) { acc += hist[hi]; if (acc > total * 0.05) break; }
+  if (hi - lo < 30) { lo = 0; hi = 255; }
+  const k = 255 / (hi - lo);
+  for (let i = 0; i < px.length; i += 4) {
+    let v = (px[i] - lo) * k; v = v < 0 ? 0 : v > 255 ? 255 : v;
+    v = v < 128 ? v * 0.75 : 255 - (255 - v) * 0.75;  // mild extra contrast (S-curve)
+    px[i] = px[i + 1] = px[i + 2] = v;
+  }
+  ctx.putImageData(d, 0, 0);
+  return cv;
+}
+let worker = null;
+async function getWorker() {
+  if (worker) return worker;
+  if (!window.Tesseract) throw new Error("โหลดตัวอ่านบิลไม่สำเร็จ (ต้องต่ออินเทอร์เน็ต)");
+  worker = await Tesseract.createWorker(["tha", "eng"], 1, {
+    logger: m => {
+      if (m.status === "recognizing text") setProgress(0.3 + m.progress * 0.7, "กำลังอ่านตัวอักษร…");
+      else if (/load|initializ/i.test(m.status)) setProgress(Math.min(0.3, 0.05 + (m.progress || 0) * 0.25), "กำลังโหลดภาษาไทย (ครั้งแรกอาจช้า)…");
+    }
+  });
+  await worker.setParameters({ tessedit_pageseg_mode: "6", preserve_interword_spaces: "1" });
+  return worker;
+}
+async function runOCR(source) {
+  const w = await getWorker();
+  setProgress(0.3, "กำลังอ่านตัวอักษร…");
+  const { data } = await w.recognize(source);
+  return data.text || "";
+}
+async function handleFile(file, input) {
+  if (!file) return;
+  input.value = "";
+  const url = URL.createObjectURL(file);
+  $("#previewImg").src = url; $("#preview").style.display = "block";
+  showMsg("", ""); setProgress(0.02, "กำลังเตรียมรูป…");
+  [$("#btnCamera"), $("#btnUpload")].forEach(b => b.disabled = true);
+  try {
+    const img = await loadImage(url);
+    const cv = preprocess(img);
+    const text = await runOCR(cv);
+    window.__lastOCR = text;
+    $("#pasteText").value = text.trim();
+    const items = parseBillText(text);
+    setProgress(1, "อ่านเสร็จแล้ว");
+    if (items.length) {
+      const replace = !state.items.length || confirm(`อ่านได้ ${items.length} รายการ\nกด ตกลง/OK = แทนที่รายการเดิม\nกด ยกเลิก/Cancel = เพิ่มต่อท้าย`);
+      addParsed(items, replace);
+      showMsg(`✅ อ่านได้ ${items.length} รายการ — โปรดตรวจชื่อและราคาในขั้นที่ 2 อีกครั้ง`, "ok");
+      setTimeout(() => $("#s2").scrollIntoView({ behavior: "smooth" }), 400);
+    } else {
+      showMsg("อ่านรูปได้ แต่หารายการราคาไม่เจอ 😅 ข้อความที่อ่านได้อยู่ในช่อง \"วางข้อความบิลเอง\" ด้านล่าง แก้แล้วกดเพิ่มได้", "warn");
+      $("#pasteBox").open = true;
+    }
+  } catch (err) {
+    console.error(err);
+    showMsg("อ่านบิลไม่สำเร็จ: " + esc(err && err.message || err) + "<br>ลองถ่ายใหม่ให้ชัดขึ้น หรือพิมพ์รายการเอง", "err");
+    $("#progress").style.display = "none";
+  } finally {
+    [$("#btnCamera"), $("#btnUpload")].forEach(b => b.disabled = false);
+    setTimeout(() => { if ($("#barFill").style.width === "100%") $("#progress").style.display = "none"; }, 2500);
+  }
+}
+
+/* expose for testing */
+window.BillSplit = { parseBillText, compute, preprocess, runOCR, loadImage, buildSummaryText, get state() { return state; } };
+renderAll();
+</script>
+</body>
+</html>
